@@ -1,40 +1,49 @@
 ﻿using System.Threading.Tasks;
 using AnsiConsolePlugin.Util;
 using System;
+using System.Threading;
 
 namespace TimeElapsingConsolePlugin.Util
 {
 	public class Logging
 	{
-		public static bool isLoaded;
-		public static async Task AppendWait(Func<bool> refClass, string WhatDoWeAwait, string Type)
+		public static InformationClass.Information StartWaitTime(string WhatDoWeAwait, string Type, string ModName)
 		{
-			isLoaded = false;
-			Console.Write("");
-			int AwaitedTime = 0;
-			Type = HandleTimeUnits.SwitchUnits(Type);
-			while (!refClass()) // Make it so this will see if the Class is loaded or not, the class being the one passed in.
+			var Info = new InformationClass.Information(WhatDoWeAwait, Type, ModName);
+			Info.Run?.Cancel();
+			Info.Run = new CancellationTokenSource();
+			Stopwatches.HandleStopwatch("Reset", Info.watch);
+			Stopwatches.HandleStopwatch("Start", Info.watch);
+			Task.Run(async () =>
+				{
+					while (!Info.Run.IsCancellationRequested)
+					{
+						int AwaitedTime = Stopwatches.GetTimeFromType(Info.Type, Stopwatches.HandleStopwatch("Elapsed", Info.watch));
+						LogMessage(AwaitedTime, Info);
+						await Task.Delay(100, Info.Run.Token);
+					}
+				}
+			);
+			return Info;
+		}
+		public static void StopWaitTime (InformationClass.Information Info)
+		{
+			if (Info.Run == null)
 			{
-				await Waiting.WaitType(1, Type);
-				LogMessage(AwaitedTime, WhatDoWeAwait, Type);
-				AwaitedTime++;
+				return;
 			}
-			Console.Write("\r" + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityBold") + "Finished loading " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityUnderlined") + WhatDoWeAwait.ToLower() + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityBold") + " time taken to load: " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityUnderlined") + AwaitedTime + Type + ANSICodeLists.ResetColor + "   ");
+			Info.Run.Cancel();
+			Stopwatches.HandleStopwatch("Stop", Info.watch);
+			int AwaitedTime = Stopwatches.GetTimeFromType(Info.Type, Stopwatches.HandleStopwatch("Elapsed", Info.watch));
+			Console.WriteLine("[Time Elapsing Console Library - " + Info.ModName + "]: " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityBold") + "Finished loading " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityUnderlined") + Info.WhatDoWeAwait.ToLower() + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityBold") + " time taken to load: " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityUnderlined") + AwaitedTime + Info.Type + ANSICodeLists.ResetColor + "   ");
 		}
 		
-		public static void LogMessage(int Time, string WhatDoWeAwait, string Type)
+		public static void LogMessage(int Time, InformationClass.Information Info)
 		{
-			Type = HandleTimeUnits.SwitchUnits(Type);
-			int Col = Console.CursorLeft;
-			int Row = Console.CursorTop;
-			Console.Write("\r" + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityBold") + "Awaiting time for " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityUnderlined") + WhatDoWeAwait.ToLower() + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityBold") + " time spent waiting: " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityUnderlined") + Time + Type + ANSICodeLists.ResetColor + "   ");
-			Console.SetCursorPosition(Col, Row);
-			MarkLoaded();
-		}
-		
-		public static void MarkLoaded()
-		{
-			isLoaded = true;
+			int height = Console.CursorTop;
+			int column = Console.CursorLeft;
+			Console.Write("[Time Elapsing Console Library - " + Info.ModName + "]: " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityBold") + "Awaiting time for " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityUnderlined") + Info.WhatDoWeAwait.ToLower() + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityBold") + " time spent waiting: " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityUnderlined") + Time + Info.Type + ANSICodeLists.ResetColor);
+			Console.SetCursorPosition(column, height);
 		}
 	}
 }

@@ -4,15 +4,18 @@ This mod essentially enables the ability show Elapsed Time in a nice way within 
 
 ## Functions;
 
-This mod Includes 3 Nifty functions for fetching a ANSI Code Color.
+This mod Includes 3 Nifty functions.
 
-* WaitType; This function waits for a set amount of time determined by an Integer, and a string which associates with a value.
-* AppendWait: Logs the elapsed time spent loading whatever needed to be loaded, it takes a Func<bool> to handle when to stop, a Integer for the time, a String for the type, and lastly a String for what is being waited for.
+* [OUTDATED] WaitType; This function waits for a set amount of time determined by an Integer, and a string which associates with a value.
 * SwitchToUnits: Takes a time Unit and converts it into a simplified string.
+* StartWaitTime: Takes three strings representing; What is being waited for, the Unit of Time, and the mod's name thats calling it.
+* StopWaitTime: Takes the returned Info from Start to stop the logging.
+* GetTimeFromType: Gets the time unit from the passed Unit of Time and a TimeSpan.
+* HandleStopwatch: A function that takes a string representing the action and a stopwatch and handles the stop watch.
 
 ## Defining The Function Variables;
 
-This is what Type is defined at in all 3 functions:
+Unit of Time table:
 
 |     Unit      | Simplified |  Elongated  |
 |:-------------:|:----------:|:-----------:|
@@ -22,6 +25,16 @@ This is what Type is defined at in all 3 functions:
 |     Hours     |     h      |    hour     |
 |     Days      |     d      |     day     |
 |     Ticks     |     t      |    ticks    |
+
+Actions for HandleStopwatch:
+
+| Action  |                        What it will do                         |
+|:-------:|:--------------------------------------------------------------:|
+|  Start  |                 Starts the passed stop watch.                  |
+|  Stop   |                  Stops the passed stop watch.                  |
+|  Reset  |              Resets the passed stop watch to `0`.              |
+| Restart |          Restarts the passed stop watch back to `0`.           |
+| Elapsed | Gets the TimeSpan that has elapsed from the passed stop watch. |
 
 ## Maintaining and or Updating/Porting:
 
@@ -35,6 +48,6 @@ Also while im at it, if anything here is inaccurate and or needs changes lemme k
 
 ## Credits:
 
-As of 1.0.0
+As of 1.1.0
 
 * Creator - All of the Plugins code, as well as everything else associated with the mod.

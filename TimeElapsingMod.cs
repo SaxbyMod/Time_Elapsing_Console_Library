@@ -1,7 +1,5 @@
 using BepInEx;
 using BepInEx.Logging;
-using TimeElapsingConsolePlugin.Util;
-using System.Threading.Tasks;
 
 namespace TimeElapsingConsolePlugin
 {
@@ -10,22 +8,14 @@ namespace TimeElapsingConsolePlugin
     {
         public const string PluginGuid = "creator.BepInEx.TimeElapsingMod";
         public const string PluginName = "Time Elapsing Mod";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.1.0";
 
         // Define a Manual Log Source
         public static ManualLogSource Log = new ManualLogSource(PluginName);
 
         public void Awake()
         {
-	        Logger.LogMessage("Testing the TimeElapsingConsolePlugin.");
-	        Init();
-        }
-        
-        public static async Task Init()
-        {
-	        await Logging.AppendWait(() => HandleTimeUnits.isLoaded, "Handler for Conversions", "ms");
-	        await Logging.AppendWait(() => Waiting.isLoaded, "Handler for Waiting", "t");
-	        await Logging.AppendWait(() => Logging.isLoaded, "Handler for Logging", "s");
+	        Logger.LogMessage("Setting Sail! Too lazy to readd the old tests plus they weren't needed so have this instead as proof its loaded.");
         }
     }
 }

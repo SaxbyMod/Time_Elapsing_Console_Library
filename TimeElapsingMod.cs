@@ -17,7 +17,7 @@ namespace TimeElapsingConsolePlugin
 
         public void Awake()
         {
-	        Log.LogMessage("Testing the TimeElapsingConsolePlugin.");
+	        Logger.LogMessage("Testing the TimeElapsingConsolePlugin.");
 	        Init();
         }
         

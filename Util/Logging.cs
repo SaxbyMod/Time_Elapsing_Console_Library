@@ -7,9 +7,9 @@ namespace TimeElapsingConsolePlugin.Util
 {
 	public class Logging
 	{
-		public static InformationClass.Information StartWaitTime(string WhatDoWeAwait, string Type, string ModName)
+		public static Information StartWaitTime(string WhatDoWeAwait, string Type, string ModName)
 		{
-			var Info = new InformationClass.Information(WhatDoWeAwait, Type, ModName);
+			var Info = new Information(WhatDoWeAwait, Type, ModName);
 			Info.Run?.Cancel();
 			Info.Run = new CancellationTokenSource();
 			Stopwatches.HandleStopwatch("Reset", Info.watch);
@@ -26,7 +26,7 @@ namespace TimeElapsingConsolePlugin.Util
 			);
 			return Info;
 		}
-		public static void StopWaitTime (InformationClass.Information Info)
+		public static void StopWaitTime (Information Info)
 		{
 			if (Info.Run == null)
 			{
@@ -38,7 +38,7 @@ namespace TimeElapsingConsolePlugin.Util
 			Console.WriteLine("[Time Elapsing Console Library - " + Info.ModName + "]: " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityBold") + "Finished loading " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityUnderlined") + Info.WhatDoWeAwait.ToLower() + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityBold") + " time taken to load: " + ANSICodeLists.ResetColor + GetColorFromTypeFunctions.GetColorFromString("Yellow", "HighIntensityUnderlined") + AwaitedTime + Info.Type + ANSICodeLists.ResetColor + "   ");
 		}
 		
-		public static void LogMessage(int Time, InformationClass.Information Info)
+		public static void LogMessage(int Time, Information Info)
 		{
 			int height = Console.CursorTop;
 			int column = Console.CursorLeft;
